@@ -21,20 +21,17 @@ def scexp(num, exp):
     elif exp == "T":
         exp = 12
     return num*10**exp
-def is_within(updown, testnum, num):
+def is_within(updown, num, testnum):
     if testnum>(num-updown) and testnum<(num+updown):
         return True
     else:
         return False
-class DivError(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
+def angular(velocity):
+    return velocity*2*math.pi
 class RLC():
     def __init__(self, R, L, C, f=0, V=0, angle_type = "radians", angular_freq_given = False, rms_given = True):
         if not angular_freq_given:
-            self.f = 2*math.pi*f
+            self.f = angular(f)
         else:
             self.f = f
         if not rms_given:
@@ -74,23 +71,9 @@ class RLC():
             return self.I*self.imXc
         if comp == "L" or comp == "l":
             return self.I*self.imXl
-    def f_such_that_phase(self, phase, angle_type = "degrees", prec = 1):
-        for i in range(1, 10000):
-            self.f = i
-            #initialise the power variables for each value of f
-            self.power_init("degrees")
-            if not i%50:
-                print self.I_lags_V
-            #if phase in interval 2 either side of I_lags_V
-            if is_within(2, self.I_lags_V, phase):
-                return self.f
-            if i == 9999:
-                print i, self.f
-                print self.I_lags_V, phase
-                break
-        return "fail"
+
 
         
-a = RLC(50, scexp(30, -3), scexp(60, -6), 60, 120)
-b = RLC(40, scexp(20, "m"), scexp(60, "mu"))
-
+while True:
+    a = RLC(50, scexp(30, -3), scexp(60, -6), 60, 120)
+    b = RLC(40, scexp(20, "m"), scexp(60, "mu"))
